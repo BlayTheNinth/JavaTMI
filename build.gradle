@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+archivesBaseName = "JavaTMI"
+group = "net.blay09.javatmi"
+version = "0.1.0"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    provided
+    provided.extendsFrom(compile)
+}
+
+idea {
+    module {
+        scopes.PROVIDED.plus += [configurations.provided]
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile files("../JavaIRC/out/artifacts/JavaIRC_jar/JavaIRC.jar");
+    provided 'org.projectlombok:lombok:1.16.6'
+    testCompile 'junit:junit:4.12'
+}
