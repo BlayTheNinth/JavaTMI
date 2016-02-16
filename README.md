@@ -5,6 +5,7 @@ This library is still a work-in-progress and is not recommended for use in produ
 
 **Features**
 * Simple, straight-forward API
+* Event calls for various Twitch events, such as subscriptions or hosts
 * No runtime dependencies on other libraries (apart from JavaIRC)
 * Supports anonymous connections (read-only)
 * Helper methods for the various Twitch commands
