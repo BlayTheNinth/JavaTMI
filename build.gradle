@@ -11,7 +11,7 @@ def MAVEN_PASSWORD = System.getenv("MAVEN_PASSWORD") ?: ""
 
 archivesBaseName = "JavaTMI"
 group = "net.blay09.javatmi"
-version = "0.1." + BUILD_NUBMER
+version = "0.1." + BUILD_NUMBER
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
