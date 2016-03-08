@@ -132,6 +132,10 @@ public class TMIClient {
         client.start();
     }
 
+    public void disconnect() {
+        client.stop();
+    }
+
     public void join(String channel) {
         if(!channel.startsWith("#")) {
             channel = "#" + channel;
