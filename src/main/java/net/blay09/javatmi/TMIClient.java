@@ -28,7 +28,7 @@ public class TMIClient {
                 .build(), listener);
     }
 
-    public TMIClient(final Configuration configuration, final TMIListener listener) {
+    public TMIClient(final IRCConfiguration configuration, final TMIListener listener) {
         this.listener = listener;
         client = new IRCConnection(configuration, new IRCAdapter() {
             @Override
@@ -136,7 +136,7 @@ public class TMIClient {
         if(message.toLowerCase().startsWith("/me ")) {
             twitchCommands.action(channel, message.substring(4));
         } else {
-            client.privmsg(channel, message);
+            client.message(channel, message);
         }
     }
 
@@ -148,8 +148,8 @@ public class TMIClient {
         return "justinfan" + Math.floor((Math.random() * 80000) + 1000);
     }
 
-    public static Configuration.ConfigurationBuilder defaultBuilder() {
-        return Configuration.builder()
+    public static IRCConfiguration.IRCConfigurationBuilder defaultBuilder() {
+        return IRCConfiguration.builder()
                 .server("irc.twitch.tv")
                 .port(6667)
                 .capability("twitch.tv/commands")

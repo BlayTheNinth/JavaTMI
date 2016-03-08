@@ -11,43 +11,43 @@ public class TwitchCommands {
     }
 
     public void action(String channel, String message) {
-        client.privmsg(channel, "\u0001ACTION " +message + "\u0001");
+        client.message(channel, "\u0001ACTION " +message + "\u0001");
     }
 
     public void ban(String channel, String username) {
-        client.privmsg(channel, "/ban " + username);
+        client.message(channel, "/ban " + username);
     }
 
     public void clear(String channel) {
-        client.privmsg(channel, "/clear");
+        client.message(channel, "/clear");
     }
 
     public void color(String color) {
-        client.privmsg("#jtv", "/color " + color);
+        client.message("#jtv", "/color " + color);
     }
 
     public void commercial(String channel, int seconds) {
-        client.privmsg(channel, "/commercial " + seconds);
+        client.message(channel, "/commercial " + seconds);
     }
 
     public void emoteonly(String channel) {
-        client.privmsg(channel, "/emoteonly");
+        client.message(channel, "/emoteonly");
     }
 
     public void emoteonlyoff(String channel) {
-        client.privmsg(channel, "/emoteonlyoff");
+        client.message(channel, "/emoteonlyoff");
     }
 
     public void host(String channel, String target) {
-        client.privmsg(channel, "/host " + target);
+        client.message(channel, "/host " + target);
     }
 
     public void mod(String channel, String username) {
-        client.privmsg(channel, "/mod " + username);
+        client.message(channel, "/mod " + username);
     }
 
     public void mods(String channel) {
-        client.privmsg(channel, "/mods");
+        client.message(channel, "/mods");
     }
 
     public void purge(String channel, String username) {
@@ -55,46 +55,46 @@ public class TwitchCommands {
     }
 
     public void r9kbeta(String channel) {
-        client.privmsg(channel, "/r9kbeta");
+        client.message(channel, "/r9kbeta");
     }
 
     public void r9kbetaoff(String channel) {
-        client.privmsg(channel, "/r9kbetaoff");
+        client.message(channel, "/r9kbetaoff");
     }
 
     public void slow(String channel, int seconds) {
-        client.privmsg(channel, "/slow " + seconds);
+        client.message(channel, "/slow " + seconds);
     }
 
     public void slowoff(String channel) {
-        client.privmsg(channel, "/slowoff");
+        client.message(channel, "/slowoff");
     }
 
     public void subscribers(String channel) {
-        client.privmsg(channel, "/subscribers");
+        client.message(channel, "/subscribers");
     }
 
     public void subscribersoff(String channel) {
-        client.privmsg(channel, "/subscribersoff");
+        client.message(channel, "/subscribersoff");
     }
 
     public void timeout(String channel, String username, int seconds) {
-        client.privmsg(channel, "/timeout " + username + " " + seconds);
+        client.message(channel, "/timeout " + username + " " + seconds);
     }
 
     public void unban(String channel, String username) {
-        client.privmsg(channel, "/unban " + username);
+        client.message(channel, "/unban " + username);
     }
 
     public void unhost(String channel) {
-        client.privmsg(channel, "/unhost");
+        client.message(channel, "/unhost");
     }
 
     public void unmod(String channel, String username) {
-        client.privmsg(channel, "/unmod " + username);
+        client.message(channel, "/unmod " + username);
     }
 
     public void whisper(String username, String message) {
-        client.privmsg("#jtv", "/w " + username + " " + message);
+        client.message("#jtv", "/w " + username + " " + message);
     }
 }
