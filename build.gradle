@@ -9,23 +9,12 @@ def MAVEN_REPO = System.getenv("MAVEN_REPO") ?: ""
 def MAVEN_USERNAME = System.getenv("MAVEN_USERNAME") ?: ""
 def MAVEN_PASSWORD = System.getenv("MAVEN_PASSWORD") ?: ""
 
-archivesBaseName = "JavaTMI"
-group = "net.blay09.javatmi"
 version = "0.1." + BUILD_NUMBER
+group = "net.blay09.javatmi"
+archivesBaseName = "JavaTMI"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
-configurations {
-    provided
-    provided.extendsFrom(compile)
-}
-
-idea {
-    module {
-        scopes.PROVIDED.plus += [configurations.provided]
-    }
-}
 
 repositories {
     mavenCentral()
@@ -36,7 +25,6 @@ repositories {
 
 dependencies {
     compile 'net.blay09:javairc:0.0.9'
-    provided 'org.projectlombok:lombok:1.16.6'
     testCompile 'junit:junit:4.12'
 }
 
