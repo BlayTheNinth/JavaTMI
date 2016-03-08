@@ -132,6 +132,20 @@ public class TMIClient {
         client.start();
     }
 
+    public void join(String channel) {
+        if(!channel.startsWith("#")) {
+            channel = "#" + channel;
+        }
+        client.sendRaw("JOIN " + channel.toLowerCase());
+    }
+
+    public void part(String channel) {
+        if(!channel.startsWith("#")) {
+            channel = "#" + channel;
+        }
+        client.sendRaw("PART " + channel.toLowerCase());
+    }
+
     public void send(String channel, String message) {
         if(message.toLowerCase().startsWith("/me ")) {
             twitchCommands.action(channel, message.substring(4));
