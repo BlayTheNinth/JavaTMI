@@ -29,6 +29,10 @@ public class TwitchUser {
         return displayName != null ? displayName : user.getNick();
     }
 
+    public String getName() {
+        return user.getNick();
+    }
+
     public static TwitchUser fromMessage(IRCMessage message) {
         TwitchUser twitchUser = new TwitchUser(message.parseSender());
         twitchUser.color = message.getTagByKey("color");
