@@ -29,7 +29,7 @@ public class TwitchUser {
         return displayName != null ? displayName : user.getNick();
     }
 
-    public String getName() {
+    public String getNick() {
         return user.getNick();
     }
 
