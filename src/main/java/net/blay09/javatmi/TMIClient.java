@@ -22,7 +22,7 @@ public class TMIClient {
 
     public TMIClient(String username, String oauth, Collection<String> channels, TMIListener listener) {
         this(defaultBuilder()
-                .username(username)
+                .nick(username)
                 .password(oauth)
                 .autoJoinChannels(channels)
                 .build(), listener);
