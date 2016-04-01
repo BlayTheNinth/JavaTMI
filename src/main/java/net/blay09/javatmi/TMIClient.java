@@ -168,7 +168,7 @@ public class TMIClient {
 
     public static IRCConfiguration.IRCConfigurationBuilder defaultBuilder() {
         return IRCConfiguration.builder()
-                .server("irc.twitch.tv")
+                .server("irc.chat.twitch.tv")
                 .port(6667)
                 .capability("twitch.tv/commands")
                 .capability("twitch.tv/tags");
