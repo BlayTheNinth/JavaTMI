@@ -42,6 +42,11 @@ public class TMIClient {
             }
 
             @Override
+            public void onUnhandledException(IRCConnection connection, Exception e) {
+                listener.onUnhandledException(TMIClient.this, e);
+            }
+
+            @Override
             public boolean onRawMessage(IRCConnection connection, IRCMessage message) {
                 switch(message.getCommand()) {
                     case "HOSTTARGET": // channel, target, viewers

@@ -23,4 +23,6 @@ public interface TMIListener {
     void onSubMode(TMIClient client, String channel, boolean enabled);
 
     void onHosted(TMIClient client, String channel, String username, int viewers);
+
+    void onUnhandledException(TMIClient client, Exception e);
 }
