@@ -2,6 +2,11 @@ package net.blay09.javatmi;
 
 public abstract class TMIAdapter implements TMIListener {
     @Override
+    public void onUnhandledException(TMIClient client, Exception e) {
+        e.printStackTrace();
+    }
+
+    @Override
     public void onActionMessage(TMIClient client, String channel, TwitchUser user, String message) {
 
     }

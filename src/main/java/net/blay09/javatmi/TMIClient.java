@@ -163,6 +163,10 @@ public class TMIClient {
         }
     }
 
+    public IRCConnection getIRCConnection() {
+        return client;
+    }
+
     public TwitchCommands getTwitchCommands() {
         return twitchCommands;
     }
