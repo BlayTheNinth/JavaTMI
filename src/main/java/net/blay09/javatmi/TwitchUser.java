@@ -28,7 +28,7 @@ public class TwitchUser {
     }
 
     public String getDisplayName() {
-        return displayName != null ? displayName : user.getNick();
+        return displayName != null && !displayName.isEmpty() ? displayName : user.getNick();
     }
 
     public String getNick() {
