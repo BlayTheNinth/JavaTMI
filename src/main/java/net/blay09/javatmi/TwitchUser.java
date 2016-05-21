@@ -9,6 +9,8 @@ import java.util.Objects;
 @Data
 public class TwitchUser {
     private final IRCUser user;
+    private String[] badges;
+    private String[] emotes;
     private String color;
     private String displayName;
     private int userId;
@@ -35,6 +37,8 @@ public class TwitchUser {
 
     public static TwitchUser fromMessage(IRCMessage message) {
         TwitchUser twitchUser = new TwitchUser(message.parseSender());
+        twitchUser.badges = message.getTagByKey("badges").split(",");
+        twitchUser.emotes = message.getTagByKey("emotes").split("/");
         twitchUser.color = message.getTagByKey("color");
         twitchUser.displayName = message.getTagByKey("display-name");
         twitchUser.mod = Objects.equals(message.getTagByKey("mod"), "1");
