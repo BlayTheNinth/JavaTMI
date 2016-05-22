@@ -30,6 +30,10 @@ public class TwitchUser {
         return color != null && !color.isEmpty();
     }
 
+    public boolean hasEmotes() {
+        return emotes != null;
+    }
+
     public String getDisplayName() {
         return displayName != null && !displayName.isEmpty() ? displayName : user.getNick();
     }
@@ -43,9 +47,11 @@ public class TwitchUser {
         twitchUser.badges = message.getTagByKey("badges").split(",");
         String[] emotes = message.getTagByKey("emotes").split("/");
         for(String emoteData : emotes) {
+            if(twitchUser.emotes == null) {
+                twitchUser.emotes = new ArrayList<>();
+            }
             int colonIdx = emoteData.indexOf(':');
             if(colonIdx != -1) {
-                twitchUser.emotes = new ArrayList<>();
                 int emoteId = Integer.parseInt(emoteData.substring(0, colonIdx));
                 String[] occurences = emoteData.substring(colonIdx + 1).split(",");
                 for(String occurenceData : occurences) {
