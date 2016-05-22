@@ -6,11 +6,15 @@ import net.blay09.javairc.IRCUser;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
 @Data
 public class TwitchUser {
+
+    private static final Comparator<TwitchEmote> emoteComparator = (o1, o2) -> o1.getStart() - o2.getStart();
+
     private final IRCUser user;
     private String[] badges;
     private List<TwitchEmote> emotes;
@@ -64,6 +68,9 @@ public class TwitchUser {
                 }
             }
         }
+        if(twitchUser.emotes != null) {
+            Collections.sort(twitchUser.emotes, emoteComparator);
+        }
         twitchUser.color = message.getTagByKey("color");
         twitchUser.displayName = message.getTagByKey("display-name");
         twitchUser.mod = Objects.equals(message.getTagByKey("mod"), "1");
@@ -76,4 +83,5 @@ public class TwitchUser {
         twitchUser.userType = UserType.fromTag(message.getTagByKey("user-type"));
         return twitchUser;
     }
+
 }
