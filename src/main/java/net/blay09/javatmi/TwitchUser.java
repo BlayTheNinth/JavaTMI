@@ -13,7 +13,7 @@ import java.util.Objects;
 public class TwitchUser {
     private final IRCUser user;
     private String[] badges;
-    private List<TwitchEmote> emotes = Collections.emptyList();
+    private List<TwitchEmote> emotes;
     private String color;
     private String displayName;
     private int userId;
