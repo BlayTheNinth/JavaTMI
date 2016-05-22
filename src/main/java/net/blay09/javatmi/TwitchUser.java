@@ -4,13 +4,16 @@ import lombok.Data;
 import net.blay09.javairc.IRCMessage;
 import net.blay09.javairc.IRCUser;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @Data
 public class TwitchUser {
     private final IRCUser user;
     private String[] badges;
-    private String[] emotes;
+    private List<TwitchEmote> emotes = Collections.emptyList();
     private String color;
     private String displayName;
     private int userId;
@@ -38,7 +41,23 @@ public class TwitchUser {
     public static TwitchUser fromMessage(IRCMessage message) {
         TwitchUser twitchUser = new TwitchUser(message.parseSender());
         twitchUser.badges = message.getTagByKey("badges").split(",");
-        twitchUser.emotes = message.getTagByKey("emotes").split("/");
+        String[] emotes = message.getTagByKey("emotes").split("/");
+        for(String emoteData : emotes) {
+            int colonIdx = emoteData.indexOf(':');
+            if(colonIdx != -1) {
+                twitchUser.emotes = new ArrayList<>();
+                int emoteId = Integer.parseInt(emoteData.substring(0, colonIdx));
+                String[] occurences = emoteData.substring(colonIdx + 1).split(",");
+                for(String occurenceData : occurences) {
+                    int dashIdx = occurenceData.indexOf('-');
+                    if(dashIdx != -1) {
+                        int start = Integer.parseInt(occurenceData.substring(0, dashIdx));
+                        int end = Integer.parseInt(occurenceData.substring(dashIdx + 1));
+                        twitchUser.emotes.add(new TwitchEmote(emoteId, start, end));
+                    }
+                }
+            }
+        }
         twitchUser.color = message.getTagByKey("color");
         twitchUser.displayName = message.getTagByKey("display-name");
         twitchUser.mod = Objects.equals(message.getTagByKey("mod"), "1");
