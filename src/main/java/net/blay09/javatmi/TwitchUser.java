@@ -13,8 +13,6 @@ import java.util.Objects;
 @Data
 public class TwitchUser {
 
-    private static final Comparator<TwitchEmote> emoteComparator = (o1, o2) -> o1.getStart() - o2.getStart();
-
     private final IRCUser user;
     private String[] badges;
     private List<TwitchEmote> emotes;
@@ -67,9 +65,6 @@ public class TwitchUser {
                     }
                 }
             }
-        }
-        if(twitchUser.emotes != null) {
-            Collections.sort(twitchUser.emotes, emoteComparator);
         }
         twitchUser.color = message.getTagByKey("color");
         twitchUser.displayName = message.getTagByKey("display-name");
