@@ -90,4 +90,9 @@ public abstract class TMIAdapter implements TMIListener {
     public void onHosted(TMIClient client, String channel, String username, int viewers) {
 
     }
+
+    @Override
+    public void onUserState(TMIClient client, String channel, TwitchUser user) {
+
+    }
 }

@@ -17,6 +17,8 @@ public interface TMIListener {
     void onTimeout(TMIClient client, String channel, String username);
     void onClearChat(TMIClient client, String channel);
 
+    void onUserState(TMIClient client, String channel, TwitchUser user);
+
     void onEmoteOnly(TMIClient client, String channel, boolean enabled);
     void onR9kBeta(TMIClient client, String channel, boolean enabled);
     void onSlowMode(TMIClient client, String channel, boolean enabled, int seconds);

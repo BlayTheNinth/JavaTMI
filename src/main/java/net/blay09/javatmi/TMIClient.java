@@ -56,7 +56,11 @@ public class TMIClient {
                             listener.onHost(TMIClient.this, message.arg(0), message.arg(1), Integer.parseInt(message.arg(2)));
                         }
                         break;
+                    case "USERSTATE": // channel
+                        listener.onUserState(TMIClient.this, message.arg(0), TwitchUser.fromMessage(message));
+                        break;
                     case "ROOMSTATE": // channel
+                        // Listen for slow mode here to grab the time, as it's not sent within the notice
                         String slow = message.getTagByKey("slow");
                         if(slow != null && message.getTagByKey("subs-only") == null) { // Only trigger event if ROOMSTATE occured from change (will only contain changed tag)
                             int slowTime = Integer.parseInt(slow);
