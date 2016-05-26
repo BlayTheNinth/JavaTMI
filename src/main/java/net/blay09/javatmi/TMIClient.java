@@ -57,7 +57,14 @@ public class TMIClient {
                         }
                         break;
                     case "USERSTATE": // channel
-                        listener.onUserState(TMIClient.this, message.arg(0), TwitchUser.fromMessage(message));
+                        TwitchUser userState = TwitchUser.fromMessage(message);
+                        TwitchUser thisUser = new TwitchUser(new IRCUser(connection.getNick(), null, null));
+                        thisUser.setColor(userState.getColor());
+                        thisUser.setDisplayName(userState.getDisplayName());
+                        thisUser.setSubscriber(userState.isSubscriber());
+                        thisUser.setMod(userState.isMod());
+                        thisUser.setTurbo(userState.isTurbo());
+                        listener.onUserState(TMIClient.this, message.arg(0), thisUser);
                         break;
                     case "ROOMSTATE": // channel
                         // Listen for slow mode here to grab the time, as it's not sent within the notice
