@@ -36,6 +36,10 @@ public class TwitchUser {
         return emotes != null;
     }
 
+    public boolean hasBadges() {
+        return badges != null;
+    }
+
     public String getDisplayName() {
         return displayName != null && !displayName.isEmpty() ? displayName : user.getNick();
     }
@@ -46,22 +50,28 @@ public class TwitchUser {
 
     public static TwitchUser fromMessage(IRCMessage message) {
         TwitchUser twitchUser = new TwitchUser(message.parseSender());
-        twitchUser.badges = message.getTagByKey("badges").split(",");
-        String[] emotes = message.getTagByKey("emotes").split("/");
-        for(String emoteData : emotes) {
-            if(twitchUser.emotes == null) {
-                twitchUser.emotes = new ArrayList<>();
-            }
-            int colonIdx = emoteData.indexOf(':');
-            if(colonIdx != -1) {
-                int emoteId = Integer.parseInt(emoteData.substring(0, colonIdx));
-                String[] occurences = emoteData.substring(colonIdx + 1).split(",");
-                for(String occurenceData : occurences) {
-                    int dashIdx = occurenceData.indexOf('-');
-                    if(dashIdx != -1) {
-                        int start = Integer.parseInt(occurenceData.substring(0, dashIdx));
-                        int end = Integer.parseInt(occurenceData.substring(dashIdx + 1));
-                        twitchUser.emotes.add(new TwitchEmote(emoteId, start, end));
+        String badgesTag = message.getTagByKey("badges");
+        if(badgesTag != null) {
+            twitchUser.badges = badgesTag.split(",");
+        }
+        String emotesTag = message.getTagByKey("emotes");
+        if(emotesTag != null) {
+            String[] emotes = emotesTag.split("/");
+            for (String emoteData : emotes) {
+                if (twitchUser.emotes == null) {
+                    twitchUser.emotes = new ArrayList<>();
+                }
+                int colonIdx = emoteData.indexOf(':');
+                if (colonIdx != -1) {
+                    int emoteId = Integer.parseInt(emoteData.substring(0, colonIdx));
+                    String[] occurences = emoteData.substring(colonIdx + 1).split(",");
+                    for (String occurenceData : occurences) {
+                        int dashIdx = occurenceData.indexOf('-');
+                        if (dashIdx != -1) {
+                            int start = Integer.parseInt(occurenceData.substring(0, dashIdx));
+                            int end = Integer.parseInt(occurenceData.substring(dashIdx + 1));
+                            twitchUser.emotes.add(new TwitchEmote(emoteId, start, end));
+                        }
                     }
                 }
             }

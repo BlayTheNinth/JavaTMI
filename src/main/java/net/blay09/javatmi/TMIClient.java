@@ -137,6 +137,10 @@ public class TMIClient {
         twitchCommands = new TwitchCommands(client);
     }
 
+    public boolean isConnected() {
+        return client.isConnected();
+    }
+
     public void connect() {
         client.start();
     }
