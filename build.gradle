@@ -5,12 +5,9 @@ plugins {
 }
 
 def BUILD_NUMBER = System.getenv("BUILD_NUMBER") ?: "0"
-def MAVEN_REPO = System.getenv("MAVEN_REPO") ?: ""
-def MAVEN_USERNAME = System.getenv("MAVEN_USERNAME") ?: ""
-def MAVEN_PASSWORD = System.getenv("MAVEN_PASSWORD") ?: ""
 
 version = "0.1." + BUILD_NUMBER
-group = "net.blay09.javatmi"
+group = "net.blay09.lib"
 archivesBaseName = "JavaTMI"
 
 sourceCompatibility = 1.8
@@ -19,12 +16,12 @@ targetCompatibility = 1.8
 repositories {
     mavenCentral()
     maven {
-        url 'http://repo.blay09.net'
+        url 'http://blay09.net:8081/artifactory/repo/'
     }
 }
 
 dependencies {
-    compile 'net.blay09:javairc:0.0.9'
+    compile 'net.blay09.lib:JavaIRC:0.0.14'
     testCompile 'junit:junit:4.12'
 }
 
@@ -32,30 +29,3 @@ task delombok(type: io.franzbecker.gradle.lombok.task.DelombokTask) {
     args("src/main/java", "-d", "src/main/generated")
 }
 jar.dependsOn delombok
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: MAVEN_REPO) {
-                authentication(userName: MAVEN_USERNAME, password: MAVEN_PASSWORD)
-            }
-
-            pom {
-                groupId = project.group
-                version = project.version
-                artifactId = project.archivesBaseName
-            }
-
-            pom.withXml {
-                asNode().dependencies.dependency.findAll {
-                    it.scope.text() == "compile"
-                }.each {
-                    if(it.optional)
-                        it.optional.value = 'true'
-                    else
-                        it.appendNode('optional', 'true');
-                }
-            }
-        }
-    }
-}
