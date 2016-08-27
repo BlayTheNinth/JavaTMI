@@ -53,7 +53,7 @@ public class TMIClient {
                         if(message.arg(1).charAt(0) == '-') {
                             listener.onUnhost(TMIClient.this, message.arg(0), Integer.parseInt(message.arg(2)));
                         } else {
-                            listener.onHost(TMIClient.this, message.arg(0), message.arg(1), Integer.parseInt(message.arg(2)));
+                            listener.onHost(TMIClient.this, message.arg(0), message.arg(1), message.argCount() > 2 ? Integer.parseInt(message.arg(2)) : 0);
                         }
                         break;
                     case "USERSTATE": // channel
