@@ -7,12 +7,17 @@ public abstract class TMIAdapter implements TMIListener {
     }
 
     @Override
-    public void onActionMessage(TMIClient client, String channel, TwitchUser user, String message) {
+    public void onChatMessage(TMIClient client, String channel, TwitchUser user, TwitchMessage message) {
 
     }
 
     @Override
-    public void onChatMessage(TMIClient client, String channel, TwitchUser user, String message) {
+    public void onResubscribe(TMIClient client, String channel, TwitchUser user, int months, String message) {
+
+    }
+
+    @Override
+    public void onReconnectInbound(TMIClient client) {
 
     }
 
@@ -38,11 +43,6 @@ public abstract class TMIAdapter implements TMIListener {
 
     @Override
     public void onSubscribe(TMIClient client, String channel, String username) {
-
-    }
-
-    @Override
-    public void onResubscribe(TMIClient client, String channel, String username, int months) {
 
     }
 
@@ -95,4 +95,5 @@ public abstract class TMIAdapter implements TMIListener {
     public void onUserState(TMIClient client, String channel, TwitchUser user) {
 
     }
+
 }

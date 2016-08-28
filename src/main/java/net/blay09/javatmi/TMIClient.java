@@ -66,16 +66,29 @@ public class TMIClient {
                         thisUser.setTurbo(userState.isTurbo());
                         listener.onUserState(TMIClient.this, message.arg(0), thisUser);
                         break;
+                    case "RECONNECT":
+                        listener.onReconnectInbound(TMIClient.this);
+                        break;
                     case "ROOMSTATE": // channel
                         // Listen for slow mode here to grab the time, as it's not sent within the notice
                         String slow = message.getTagByKey("slow");
-                        if(slow != null && message.getTagByKey("subs-only") == null) { // Only trigger event if ROOMSTATE occured from change (will only contain changed tag)
+                        if(slow != null && message.getTagByKey("subs-only") == null) { // Only trigger event if ROOMSTATE occured from change (will only contain changed tag); other tag checked is no relevant
                             int slowTime = Integer.parseInt(slow);
                             if(slowTime == 0) {
                                 listener.onSlowMode(TMIClient.this, message.arg(0), false, 0);
                             } else {
                                 listener.onSlowMode(TMIClient.this, message.arg(0), true, slowTime);
                             }
+                        }
+                        break;
+                    case "USERNOTICE": // channel, [message]
+                        String msgId = message.getTagByKey("msg-id");
+                        if("resub".equals(msgId)) {
+                            String login = message.getTagByKey("login");
+                            String monthsTag = message.getTagByKey("msg-param-months");
+                            int months = monthsTag != null ? Integer.parseInt(monthsTag) : 0;
+                            String messageText = message.argCount() > 1 ? message.arg(1) : null;
+                            listener.onResubscribe(TMIClient.this, message.arg(0), TwitchUser.fromMessageTags(message, login), months, messageText);
                         }
                         break;
                     case "CLEARCHAT": // channel, [username]
@@ -97,21 +110,22 @@ public class TMIClient {
                 if(user.getNick().equals("twitchnotify")) {
                     Matcher matcher = SUBSCRIBE_PATTERN.matcher(text);
                     if(matcher.find()) {
-                        if(matcher.group(2) != null) {
-                            listener.onResubscribe(TMIClient.this, channel, matcher.group(1), Integer.parseInt(matcher.group(2)));
-                        } else {
-                            listener.onSubscribe(TMIClient.this, channel, matcher.group(1));
-                        }
+                        listener.onSubscribe(TMIClient.this, channel, matcher.group(1));
                     }
                 } else if(user.getNick().equals("jtv")) {
                     Matcher matcher = HOST_PATTERN.matcher(text);
                     if(matcher.find()) {
                         listener.onHosted(TMIClient.this, channel, matcher.group(1), matcher.group(2) != null ? Integer.parseInt(matcher.group(2)) : 0);
                     }
-                } else if(text.startsWith("\u0001ACTION ") && text.endsWith("\u0001")) {
-                    listener.onActionMessage(TMIClient.this, channel, TwitchUser.fromMessage(message), text.substring(8, text.length() - 1));
                 } else {
-                    listener.onChatMessage(TMIClient.this, channel, TwitchUser.fromMessage(message), text);
+                    boolean isAction = false;
+                    if(text.startsWith("\u0001ACTION ") && text.endsWith("\u0001")) {
+                        text = text.substring(8, text.length() - 1);
+                        isAction = true;
+                    }
+                    String bitsTag = message.getTagByKey("bits");
+                    int bits = (bitsTag != null && !bitsTag.isEmpty()) ? Integer.parseInt(bitsTag) : 0;
+                    listener.onChatMessage(TMIClient.this, channel, TwitchUser.fromMessage(message), new TwitchMessage(text, isAction, bits));
                 }
             }
 

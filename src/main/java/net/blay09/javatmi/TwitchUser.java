@@ -49,7 +49,14 @@ public class TwitchUser {
     }
 
     public static TwitchUser fromMessage(IRCMessage message) {
-        TwitchUser twitchUser = new TwitchUser(message.parseSender());
+        return parseMessageTags(new TwitchUser(message.parseSender()), message);
+    }
+
+    public static TwitchUser fromMessageTags(IRCMessage message, String nick) {
+        return parseMessageTags(new TwitchUser(new IRCUser(nick, null, null)), message);
+    }
+
+    private static TwitchUser parseMessageTags(TwitchUser twitchUser, IRCMessage message) {
         String badgesTag = message.getTagByKey("badges");
         if(badgesTag != null) {
             twitchUser.badges = badgesTag.split(",");
@@ -88,5 +95,4 @@ public class TwitchUser {
         twitchUser.userType = UserType.fromTag(message.getTagByKey("user-type"));
         return twitchUser;
     }
-
 }
