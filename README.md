@@ -1,8 +1,6 @@
 # JavaTMI
 Java Library for the Twitch Messaging Interface based on https://github.com/blay09/JavaIRC
 
-This library is still a work-in-progress and is not recommended for use in production environments yet. Until the first public release, the API may change at any time.
-
 **Features**
 * Simple, straight-forward API
 * Event calls for various Twitch events, such as subscriptions or hosts
@@ -13,12 +11,14 @@ This library is still a work-in-progress and is not recommended for use in produ
 **Example Usage**
 ```java
 import net.blay09.javatmi.TMIAdapter;
+import net.blay09.javatmi.TMIClient;
+import net.blay09.javatmi.TwitchUser;
 
 public class JavaTMIExample extends TMIAdapter {
 
     @Override
-    void onResubscribe(TMIClient client, String channel, String username, int months) {
-        client.send(channel, "Welcome back, " + username + "! Thank you for " + months + " months of support. <3");
+    void onResubscribe(TMIClient client, String channel, TwitchUser user, int months, String message) {
+        client.send(channel, "Welcome back, " + user.getDisplayName() + "! Thank you for " + months + " months of support. <3");
     }
 
     public static void main(String[] args) {
