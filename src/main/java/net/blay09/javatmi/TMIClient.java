@@ -8,8 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TMIClient {
-
-    private static final Pattern SUBSCRIBE_PATTERN = Pattern.compile("([^ ]+)(?: just)? subscribed!?(?: for )?([0-9]+)?(?: months in a row)?");
+    private static final Pattern SUBSCRIBE_PATTERN = Pattern.compile("([^ ]+) just subscribed( with Twitch Prime)?!");
     private static final Pattern HOST_PATTERN = Pattern.compile("([^ ]+) is now hosting you(?: for)?([0-9]+)");
 
     private final TMIListener listener;
@@ -110,7 +109,7 @@ public class TMIClient {
                 if(user.getNick().equals("twitchnotify")) {
                     Matcher matcher = SUBSCRIBE_PATTERN.matcher(text);
                     if(matcher.find()) {
-                        listener.onSubscribe(TMIClient.this, channel, matcher.group(1));
+                        listener.onSubscribe(TMIClient.this, channel, matcher.group(1), matcher.group(2) != null);
                     }
                 } else if(user.getNick().equals("jtv")) {
                     Matcher matcher = HOST_PATTERN.matcher(text);

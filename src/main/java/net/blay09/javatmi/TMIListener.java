@@ -8,7 +8,7 @@ public interface TMIListener {
     void onConnected(TMIClient client);
     void onDisconnected(TMIClient client);
 
-    void onSubscribe(TMIClient client, String channel, String username);
+    void onSubscribe(TMIClient client, String channel, String username, boolean prime);
     void onResubscribe(TMIClient client, String channel, TwitchUser user, int months, String message);
     void onHost(TMIClient client, String channel, String username, int viewers);
     void onUnhost(TMIClient client, String channel, int viewers);
