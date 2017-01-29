@@ -61,7 +61,9 @@ public class TMIClient {
                         thisUser.setColor(userState.getColor());
                         thisUser.setDisplayName(userState.getDisplayName());
                         thisUser.setSubscriber(userState.isSubscriber());
+                        thisUser.setSubscribedMonths(userState.getSubscribedMonths());
                         thisUser.setMod(userState.isMod());
+                        thisUser.setCheeredBits(userState.getCheeredBits());
                         thisUser.setTurbo(userState.isTurbo());
                         listener.onUserState(TMIClient.this, message.arg(0), thisUser);
                         break;
@@ -124,7 +126,9 @@ public class TMIClient {
                     }
                     String bitsTag = message.getTagByKey("bits");
                     int bits = (bitsTag != null && !bitsTag.isEmpty()) ? Integer.parseInt(bitsTag) : 0;
-                    listener.onChatMessage(TMIClient.this, channel, TwitchUser.fromMessage(message), new TwitchMessage(text, isAction, bits));
+                    String channelTag = message.getTagByKey("room-id");
+                    int channelId = (channelTag != null && !channelTag.isEmpty()) ? Integer.parseInt(channelTag): -1;
+                    listener.onChatMessage(TMIClient.this, channel, TwitchUser.fromMessage(message), new TwitchMessage(text, channelId, isAction, bits));
                 }
             }
 

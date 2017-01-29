@@ -22,6 +22,8 @@ public class TwitchUser {
     private UserType userType;
     private boolean mod;
     private boolean subscriber;
+    private int subscribedMonths = 0;
+    private int cheeredBits = 0;
     private boolean turbo;
 
     public TwitchUser(IRCUser user) {
@@ -60,6 +62,13 @@ public class TwitchUser {
         String badgesTag = message.getTagByKey("badges");
         if(badgesTag != null) {
             twitchUser.badges = badgesTag.split(",");
+            for (String s: twitchUser.badges) {
+                if (s.startsWith("subscriber")) {
+                    twitchUser.subscribedMonths = Integer.parseInt(s.split("/")[1]);
+                } else if(s.startsWith("bits")) {
+                    twitchUser.cheeredBits = Integer.parseInt(s.split("/")[1]);
+                }
+            }
         }
         String emotesTag = message.getTagByKey("emotes");
         if(emotesTag != null) {
