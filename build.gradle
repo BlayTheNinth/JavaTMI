@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compile 'net.blay09.lib:JavaIRC:0.0.20'
+    compile 'net.blay09.lib:JavaIRC:0.0.23'
     testCompile 'junit:junit:4.12'
 }
 
