@@ -48,11 +48,22 @@ public class TMIClient {
             @Override
             public boolean onRawMessage(IRCConnection connection, IRCMessage message) {
                 switch(message.getCommand()) {
-                    case "HOSTTARGET": // channel, target, viewers
+                    case "HOSTTARGET": // channel, target & space & viewers
                         if(message.arg(1).charAt(0) == '-') {
-                            listener.onUnhost(TMIClient.this, message.arg(0), Integer.parseInt(message.arg(2)));
+                            listener.onUnhost(TMIClient.this, message.arg(0), tryParseInt(message.arg(1), 0));
                         } else {
-                            listener.onHost(TMIClient.this, message.arg(0), message.arg(1), message.argCount() > 2 ? Integer.parseInt(message.arg(2)) : 0);
+                            String targetChannelAndViewers = message.arg(1);
+                            String hostChannel;
+                            int hostViewers;
+                            int spaceIdx = targetChannelAndViewers.indexOf(' ');
+                            if(spaceIdx != -1) {
+                                hostChannel = targetChannelAndViewers.substring(0, spaceIdx);
+                                hostViewers = tryParseInt(targetChannelAndViewers.substring(spaceIdx + 1), 0);
+                            } else {
+                                hostChannel = targetChannelAndViewers;
+                                hostViewers = 0;
+                            }
+                            listener.onHost(TMIClient.this, message.arg(0), hostChannel, hostViewers);
                         }
                         break;
                     case "USERSTATE": // channel
@@ -213,5 +224,13 @@ public class TMIClient {
                 .port(6667)
                 .capability("twitch.tv/commands")
                 .capability("twitch.tv/tags");
+    }
+
+    private static int tryParseInt(String s, int defaultVal) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return defaultVal;
+        }
     }
 }
