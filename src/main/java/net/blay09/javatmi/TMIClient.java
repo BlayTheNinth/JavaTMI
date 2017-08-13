@@ -215,7 +215,7 @@ public class TMIClient {
     }
 
     private static String getAnonymousUsername() {
-        return "justinfan" + Math.floor((Math.random() * 80000) + 1000);
+        return "justinfan" + (int) (Math.floor((Math.random() * 80000) + 1000));
     }
 
     public static IRCConfiguration.IRCConfigurationBuilder defaultBuilder() {
