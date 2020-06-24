@@ -1,31 +1,91 @@
 plugins {
-    id 'io.franzbecker.gradle-lombok' version '1.6'
-    id 'java'
-    id 'maven'
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
 }
 
-def BUILD_NUMBER = System.getenv("BUILD_NUMBER") ?: "0"
-
-version = "0.1." + BUILD_NUMBER
-group = "net.blay09.lib"
-archivesBaseName = "JavaTMI"
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+version = "0.1.0-SNAPSHOT"
+group = "net.blay09"
 
 repositories {
     mavenCentral()
     maven {
-        url 'http://blay09.net:8081/artifactory/repo/'
+        url 'https://artifactory.blay09.net/artifactory/libs-snapshot'
     }
 }
 
 dependencies {
-    compile 'net.blay09.lib:JavaIRC:0.0.23'
+    compile 'net.blay09:javairc:0.1.0-SNAPSHOT'
     testCompile 'junit:junit:4.12'
 }
 
-task delombok(type: io.franzbecker.gradle.lombok.task.DelombokTask) {
-    args("src/main/java", "-d", "src/main/generated")
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
-jar.dependsOn delombok
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'javatmi'
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'JavaTMI'
+                description = 'Lightweight Twitch Messaging Interface library for Java'
+                url = 'https://github.com/blay09/JavaTMI'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/blay09/JavaTMI/blob/master/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'blay09'
+                        name = 'BlayTheNinth'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/blay09/JavaTMI.git'
+                    developerConnection = 'scm:git:ssh://github.com/blay09/JavaTMI.git'
+                    url = 'https://github.com/blay09/JavaTMI'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username project.mavenUsername
+                password project.mavenPassword
+            }
+
+            def releasesRepoUrl = 'https://artifactory.blay09.net/artifactory/libs-release-local'
+            def snapshotsRepoUrl = 'https://artifactory.blay09.net/artifactory/libs-snapshot-local'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+        }
+    }
+}
+
+signing {
+    required {
+        false
+    }
+    if (required) {
+        sign publishing.publications.mavenJava
+    }
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}

@@ -1,16 +1,12 @@
 package net.blay09.javatmi;
 
-import lombok.Data;
 import net.blay09.javairc.IRCMessage;
 import net.blay09.javairc.IRCUser;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-@Data
 public class TwitchUser {
 
     private final IRCUser user;
@@ -79,7 +75,7 @@ public class TwitchUser {
                 }
                 int colonIdx = emoteData.indexOf(':');
                 if (colonIdx != -1) {
-                    int emoteId = Integer.parseInt(emoteData.substring(0, colonIdx));
+                    String emoteId = emoteData.substring(0, colonIdx);
                     String[] occurences = emoteData.substring(colonIdx + 1).split(",");
                     for (String occurenceData : occurences) {
                         int dashIdx = occurenceData.indexOf('-');
@@ -103,5 +99,69 @@ public class TwitchUser {
         }
         twitchUser.userType = UserType.fromTag(message.getTagByKey("user-type"));
         return twitchUser;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public boolean isSubscriber() {
+        return subscriber;
+    }
+
+    public void setSubscriber(boolean subscriber) {
+        this.subscriber = subscriber;
+    }
+
+    public int getSubscribedMonths() {
+        return subscribedMonths;
+    }
+
+    public void setSubscribedMonths(int subscribedMonths) {
+        this.subscribedMonths = subscribedMonths;
+    }
+
+    public boolean isTurbo() {
+        return turbo;
+    }
+
+    public boolean isMod() {
+        return mod;
+    }
+
+    public void setMod(boolean mod) {
+        this.mod = mod;
+    }
+
+    public int getCheeredBits() {
+        return cheeredBits;
+    }
+
+    public void setCheeredBits(int cheeredBits) {
+        this.cheeredBits = cheeredBits;
+    }
+
+    public void setTurbo(boolean turbo) {
+        this.turbo = turbo;
+    }
+
+    public List<TwitchEmote> getEmotes() {
+        return emotes;
+    }
+
+    public String[] getBadges() {
+        return badges;
+    }
+
+    public void setBadges(String[] badges) {
+        this.badges = badges;
     }
 }

@@ -4,7 +4,7 @@ Java Library for the Twitch Messaging Interface based on https://github.com/blay
 **Features**
 * Simple, straight-forward API
 * Event calls for various Twitch events, such as subscriptions or hosts
-* No runtime dependencies on other libraries (apart from JavaIRC)
+* Lightweight, only requires JavaIRC at runtime
 * Supports anonymous connections (read-only)
 * Helper methods for the various Twitch commands
 
@@ -22,7 +22,7 @@ public class JavaTMIExample extends TMIAdapter {
     }
 
     public static void main(String[] args) {
-        TMIClient client = new TMIClient("blay09", "oauth:1234567890abcdefghijklmn", Collections.singletonList("#blay09"), new JavaTMIExample());
+        TMIClient client = new TMIClient("blaytheninth", "oauth:1234567890abcdefghijklmn", Collections.singletonList("#blaytheninth"), new JavaTMIExample());
         client.connect();
     }
 }

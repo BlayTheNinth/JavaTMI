@@ -1,11 +1,31 @@
 package net.blay09.javatmi;
 
-import lombok.Value;
-
-@Value
 public class TwitchMessage {
-	public String message;
-	public int channelId;
-	public boolean isAction;
-	public int bits;
+	public final String message;
+	public final int channelId;
+	public final boolean isAction;
+	public final int bits;
+
+	public TwitchMessage(String message, int channelId, boolean isAction, int bits) {
+		this.message = message;
+		this.channelId = channelId;
+		this.isAction = isAction;
+		this.bits = bits;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public int getChannelId() {
+		return channelId;
+	}
+
+	public boolean isAction() {
+		return isAction;
+	}
+
+	public int getBits() {
+		return bits;
+	}
 }
