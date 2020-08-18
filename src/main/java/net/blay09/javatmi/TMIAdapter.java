@@ -12,7 +12,7 @@ public abstract class TMIAdapter implements TMIListener {
     }
 
     @Override
-    public void onResubscribe(TMIClient client, String channel, TwitchUser user, int months, String message) {
+    public void onResubscribe(TMIClient client, String channel, TwitchUser user, SubscriptionInfo subscriptionInfo) {
 
     }
 

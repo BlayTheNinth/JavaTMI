@@ -94,12 +94,24 @@ public class TMIClient {
                         break;
                     case "USERNOTICE": // channel, [message]
                         String msgId = message.getTagByKey("msg-id");
-                        if ("resub".equals(msgId)) {
-                            String login = message.getTagByKey("login");
-                            String monthsTag = message.getTagByKey("msg-param-months");
-                            int months = monthsTag != null ? Integer.parseInt(monthsTag) : 0;
-                            String messageText = message.argCount() > 1 ? message.arg(1) : null;
-                            listener.onResubscribe(TMIClient.this, message.arg(0), TwitchUser.fromMessageTags(message, login), months, messageText);
+                        if ("sub".equals(msgId)) {
+                            final SubscriptionInfo info = parseSubscriptionInfo(message);
+                            final TwitchUser user = TwitchUser.fromMessageTags(message);
+                            listener.onSubscribe(TMIClient.this, message.arg(0), user, info);
+                        } else if ("resub".equals(msgId)) {
+                            final SubscriptionInfo info = parseSubscriptionInfo(message);
+                            final TwitchUser user = TwitchUser.fromMessageTags(message);
+                            listener.onResubscribe(TMIClient.this, message.arg(0), user, info);
+                        } else if ("subgift".equals(msgId) || "anonsubgift".equals(msgId)) {
+                            final GiftSubscriptionInfo info = parseGiftSubscriptionInfo(message);
+                            info.setSenderAnonymous("anonsubgift".equals(msgId));
+                            final TwitchUser user = TwitchUser.fromMessageTags(message);
+                            listener.onGiftSubscription(TMIClient.this, message.arg(0), user, info);
+                        } else if ("giftpaidupgrade".equals(msgId) || "anongiftpaidupgrade".equals(msgId)) {
+                            final GiftPaidUpgradeInfo info = parseGiftPaidUpgradeInfo(message);
+                            info.setSenderAnonymous("anongiftpaidupgrade".equals(msgId));
+                            final TwitchUser user = TwitchUser.fromMessageTags(message);
+                            listener.onGiftPaidUpgrade(TMIClient.this, message.arg(0), user, info);
                         }
                         break;
                     case "CLEARCHAT": // channel, [username]
@@ -174,6 +186,41 @@ public class TMIClient {
         twitchCommands = new TwitchCommands(client);
     }
 
+    private SubscriptionInfo parseSubscriptionInfo(IRCMessage message) {
+        SubscriptionInfo info = new SubscriptionInfo();
+        info.setCumulativeMonths(tryParseInt(message.getTagByKey("msg-param-cumulative-months"), 0));
+        info.setMessage(message.getTagByKey("message"));
+        info.setShouldShareStreak("1".equals(message.getTagByKey("msg-param-should-share-streak")));
+        info.setStreakMonths(tryParseInt(message.getTagByKey("msg-param-streak-months"), 0));
+        info.setSubPlan(message.getTagByKey("msg-param-sub-plan"));
+        info.setSubPlanName(message.getTagByKey("msg-param-sub-plan-name"));
+        info.setSystemMessage(message.getTagByKey("system-message"));
+        return info;
+    }
+
+    private GiftSubscriptionInfo parseGiftSubscriptionInfo(IRCMessage message) {
+        GiftSubscriptionInfo info = new GiftSubscriptionInfo();
+        info.setGiftMonths(tryParseInt(message.getTagByKey("msg-param-gift-months"), 0));
+        info.setRecipientId(message.getTagByKey("msg-param-recipient-id"));
+        info.setRecipientUserName(message.getTagByKey("msg-param-recipient-user-name"));
+        info.setRecipientDisplayName(message.getTagByKey("msg-param-recipient-display-name"));
+        info.setSubPlan(message.getTagByKey("msg-param-sub-plan"));
+        info.setSubPlanName(message.getTagByKey("msg-param-sub-plan-name"));
+        info.setSystemMessage(message.getTagByKey("system-message"));
+        return info;
+    }
+
+    private GiftPaidUpgradeInfo parseGiftPaidUpgradeInfo(IRCMessage message) {
+        GiftPaidUpgradeInfo info = new GiftPaidUpgradeInfo();
+        info.setMonths(tryParseInt(message.getTagByKey("msg-param-months"), 0));
+        info.setPromoName(message.getTagByKey("msg-param-promo-name"));
+        info.setPromoGiftTotal(tryParseInt(message.getTagByKey("msg-param-promo-gift-total"), 0));
+        info.setSenderLogin(message.getTagByKey("msg-param-sender-login"));
+        info.setSenderName(message.getTagByKey("msg-param-sender-name"));
+        info.setSystemMessage(message.getTagByKey("system-message"));
+        return info;
+    }
+
     public boolean isConnected() {
         return client.isConnected();
     }
@@ -239,7 +286,7 @@ public class TMIClient {
 
     private static int tryParseInt(String s, int defaultVal) {
         try {
-            return Integer.parseInt(s);
+            return s != null ? Integer.parseInt(s) : defaultVal;
         } catch (NumberFormatException e) {
             return defaultVal;
         }

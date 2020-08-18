@@ -8,8 +8,21 @@ public interface TMIListener {
     void onConnected(TMIClient client);
     void onDisconnected(TMIClient client);
 
-    void onSubscribe(TMIClient client, String channel, String username, boolean prime);
-    void onResubscribe(TMIClient client, String channel, TwitchUser user, int months, String message);
+    @Deprecated
+    default void onSubscribe(TMIClient client, String channel, String username, boolean prime) {}
+    default void onSubscribe(TMIClient client, String channel, TwitchUser user, SubscriptionInfo subscriptionInfo) {
+        onSubscribe(client, channel, user.getNick(), "Prime".equals(subscriptionInfo.getSubPlan()));
+    }
+
+    void onGiftSubscription(TMIClient client, String channel, TwitchUser user, GiftSubscriptionInfo giftSubscriptionInfo);
+    void onGiftPaidUpgrade(TMIClient client, String channel, TwitchUser user, GiftPaidUpgradeInfo giftPaidUpgradeInfo);
+
+    @Deprecated
+    default void onResubscribe(TMIClient client, String channel, TwitchUser user, int months, String message) {}
+    default void onResubscribe(TMIClient client, String channel, TwitchUser user, SubscriptionInfo subscriptionInfo) {
+        onResubscribe(client, channel, user, subscriptionInfo.getCumulativeMonths(), subscriptionInfo.getMessage());
+    }
+
     void onHost(TMIClient client, String channel, String username, int viewers);
     void onUnhost(TMIClient client, String channel, int viewers);
 

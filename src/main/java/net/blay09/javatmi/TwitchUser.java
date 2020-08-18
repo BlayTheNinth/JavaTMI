@@ -50,6 +50,10 @@ public class TwitchUser {
         return parseMessageTags(new TwitchUser(message.parseSender()), message);
     }
 
+    public static TwitchUser fromMessageTags(IRCMessage message) {
+        return fromMessageTags(message, message.getTagByKey("login"));
+    }
+
     public static TwitchUser fromMessageTags(IRCMessage message, String nick) {
         return parseMessageTags(new TwitchUser(new IRCUser(nick, null, null)), message);
     }
@@ -76,12 +80,12 @@ public class TwitchUser {
                 int colonIdx = emoteData.indexOf(':');
                 if (colonIdx != -1) {
                     String emoteId = emoteData.substring(0, colonIdx);
-                    String[] occurences = emoteData.substring(colonIdx + 1).split(",");
-                    for (String occurenceData : occurences) {
-                        int dashIdx = occurenceData.indexOf('-');
+                    String[] occurrences = emoteData.substring(colonIdx + 1).split(",");
+                    for (String occurrenceData : occurrences) {
+                        int dashIdx = occurrenceData.indexOf('-');
                         if (dashIdx != -1) {
-                            int start = Integer.parseInt(occurenceData.substring(0, dashIdx));
-                            int end = Integer.parseInt(occurenceData.substring(dashIdx + 1));
+                            int start = Integer.parseInt(occurrenceData.substring(0, dashIdx));
+                            int end = Integer.parseInt(occurrenceData.substring(dashIdx + 1));
                             twitchUser.emotes.add(new TwitchEmote(emoteId, start, end));
                         }
                     }
