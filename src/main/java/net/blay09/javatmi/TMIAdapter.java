@@ -96,4 +96,13 @@ public abstract class TMIAdapter implements TMIListener {
 
     }
 
+    @Override
+    public void onGiftSubscription(TMIClient client, String channel, TwitchUser user, GiftSubscriptionInfo giftSubscriptionInfo) {
+
+    }
+
+    @Override
+    public void onGiftPaidUpgrade(TMIClient client, String channel, TwitchUser user, GiftPaidUpgradeInfo giftPaidUpgradeInfo) {
+
+    }
 }
