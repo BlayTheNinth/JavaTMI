@@ -104,12 +104,12 @@ public class TMIClient {
                             listener.onResubscribe(TMIClient.this, message.arg(0), user, info);
                         } else if ("subgift".equals(msgId) || "anonsubgift".equals(msgId)) {
                             final GiftSubscriptionInfo info = parseGiftSubscriptionInfo(message);
-                            info.setSenderAnonymous("anonsubgift".equals(msgId));
+                            info.setSenderAnonymous("anonsubgift".equals(msgId) || "ananonymousgifter".equals(message.getTagByKey("login")));
                             final TwitchUser user = TwitchUser.fromMessageTags(message);
                             listener.onGiftSubscription(TMIClient.this, message.arg(0), user, info);
                         } else if ("giftpaidupgrade".equals(msgId) || "anongiftpaidupgrade".equals(msgId)) {
                             final GiftPaidUpgradeInfo info = parseGiftPaidUpgradeInfo(message);
-                            info.setSenderAnonymous("anongiftpaidupgrade".equals(msgId));
+                            info.setSenderAnonymous("anongiftpaidupgrade".equals(msgId) || "ananonymousgifter".equals(info.getSenderLogin()));
                             final TwitchUser user = TwitchUser.fromMessageTags(message);
                             listener.onGiftPaidUpgrade(TMIClient.this, message.arg(0), user, info);
                         }
