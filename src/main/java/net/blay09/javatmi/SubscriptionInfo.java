@@ -64,4 +64,8 @@ public class SubscriptionInfo {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public boolean isPrime() {
+        return "Prime".equals(subPlan);
+    }
 }
