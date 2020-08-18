@@ -42,7 +42,7 @@ public abstract class TMIAdapter implements TMIListener {
     }
 
     @Override
-    public void onSubscribe(TMIClient client, String channel, String username, boolean prime) {
+    public void onSubscribe(TMIClient client, String channel, TwitchUser user, SubscriptionInfo subscriptionInfo) {
 
     }
 
